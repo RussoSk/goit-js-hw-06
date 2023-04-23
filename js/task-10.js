@@ -1,31 +1,46 @@
+const inputRef = document.querySelector("#controls input");
+const createBtnRef = document.querySelector("[data-create]");
+const destroyBtnRef = document.querySelector("[data-destroy]");
+const boxesRef = document.querySelector("#boxes");
+const inputElement = document.querySelector('input[type="number"]');
+const maxNum = Number(inputElement.max);
+const minNum = Number(inputElement.min);
+const iterator = Number(inputElement.step);
+
+function createBoxes(amount) {
+  if (amount < minNum || amount > maxNum) {
+    return;
+  }
+  const boxSize = 30;
+  const boxes = [];
+
+  for (let i = 0; i < amount; i += iterator) {
+    const box = document.createElement("div");
+    box.style.width = `${boxSize + i * 10}px`;
+    box.style.height = `${boxSize + i * 10}px`;
+    box.style.backgroundColor = getRandomHexColor();
+
+    boxes.push(box);
+  }
+
+  boxesRef.append(...boxes);
+}
+
+function destroyBoxes() {
+  boxesRef.innerHTML = "";
+  inputElement.value = "";
+}
 
 function getRandomHexColor() {
   return `#${Math.floor(Math.random() * 16777215)
     .toString(16)
-    .padStart(6, 0)}`;
+    .padStart(6, "0")}`;
 }
-      const controls = document.querySelector("#controls");
-      const btnCreate = controls.querySelector('[data-create]');
-      const btnDestroy = controls.querySelector('[data-destroy]');
-      const boxes = document.querySelector("#boxes");
 
-      btnCreate.addEventListener("click", createBoxes);
-      btnDestroy.addEventListener("click", destroyBoxes);
+createBtnRef.addEventListener("click", () => {
+  createBoxes(inputRef.value);
+});
 
-      function createBoxes() {
-        const inputVal = controls.querySelector("input").value;
-
-        for (let i = 0; i < inputVal; i++) {
-          const box = document.createElement("div");
-          const size = 30 + i * 10;
-          box.style.width = `${size}px`;
-          box.style.height = `${size}px`;
-          box.style.backgroundColor = getRandomHexColor();
-          boxes.appendChild(box);
-        }
-      }
-
-      function destroyBoxes() {
-        boxes.innerHTML = "";
-      }
-
+destroyBtnRef.addEventListener("click", () => {
+  destroyBoxes();
+});
